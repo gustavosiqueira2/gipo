@@ -1,5 +1,13 @@
-Gipo
+<h1 align="center">
+  Gipo
+</h3>
 
-A Cormecial and Styled View for your Github based Portifolio!
+<h3 align="center">
+  A Cormecial and Styled View for your Github based Portifolio
+</h3>
 
-version 0.0.1
+<br>
+
+## License
+
+MIT
