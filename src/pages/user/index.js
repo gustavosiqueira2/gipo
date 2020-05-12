@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
 
-// import { Container } from './styles';
-import '../../assets/css/global.css';
+import Repo from './repo';
 
 const User = () => {
 
@@ -57,45 +56,35 @@ const User = () => {
   }, [user, userProfile.repos_url]);
 
   return (
-    <div style={{ display: 'flex' }}>
-      <div style={{ flex: 1, backgroundColor: '#364960' }} >
+    <div style={{ display: 'flex', justifyContent: 'flex-start', height: '100%', width: '100%' }}>
+      <div style={{ position: 'relative', float: 'left', width: 240, backgroundColor: '#364960', height: '100%', padding: 20, boxShadow: 'rgba(0, 0, 0, 0.17) 2px 0px 20px 0px', zIndex: 1 }} >
 
-        <div>
+        <div style={{ marginBottom: 10 }}>
           <img src={userProfile.avatar_url} style={{ maxWidth: 200, maxHeight: 200, borderRadius: '50%' }} alt='user_image' />
         </div>
 
-        <div>
-          <span className='white'>
-            {userProfile.name}
+        <div style={{ marginBottom: 5 }}>
+          <span style={{ fontFamily: 'Roboto', fontSize: 24 }}>
+            {userProfile.name ? userProfile.name : userProfile.login}
           </span>
         </div>
 
-        <div>
-          <span>
-            {userProfile.bio}
-          </span>
-        </div>
-
-        <div>
-          <span>
+        <div style={{ marginBottom: 20 }}>
+          <span style={{ fontFamily: 'Roboto' }}>
             {userProfile.company}
+          </span>
+        </div>
+
+        <div>
+          <span style={{ fontFamily: 'Roboto' }}>
+            {userProfile.bio}
           </span>
         </div>
 
       </div>
 
-      <div style={{ flex: 8, padding: 20 }}>
-        {
-          userRepos.map((repo) => {
-            return (
-              <div key={repo.id}>
-                <span>
-                  {repo.name}
-                </span>
-              </div>
-            )
-          })
-        }
+      <div style={{ padding: 20, height: '100%', width: '100%', backgroundColor: '#455468', overflow: 'scroll' }}>
+        {userRepos.map((repo) => <Repo key={repo.id} repo={repo} />)}
       </div>
 
     </div>

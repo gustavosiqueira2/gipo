@@ -1,0 +1,9 @@
+.container {
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.container:hover {
+  box-shadow: 0px 2px 10px 1px #65ffc652;
+}
