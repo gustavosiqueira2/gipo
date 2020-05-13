@@ -9,7 +9,37 @@ const User = () => {
   const { user } = useParams();
 
   const [userProfile, setUserProfile] = useState({
-    repos_url: ''
+    login: '',
+    id: '',
+    node_id: '',
+    avatar_url: '',
+    gravatar_id: '',
+    url: '',
+    html_url: '',
+    followers_url: '',
+    following_url: '',
+    gists_url: '',
+    starred_url: '',
+    subscriptions_url: '',
+    organizations_url: '',
+    repos_url: '',
+    events_url: '',
+    received_events_url: '',
+    type: '',
+    site_admin: '',
+    name: '',
+    company: '',
+    blog: '',
+    location: '',
+    email: '',
+    hireable: '',
+    bio: '',
+    public_repos: '',
+    public_gists: '',
+    followers: '',
+    following: '',
+    created_at: '',
+    updated_at: '',
   });
   const [userRepos, setUserRepos] = useState([]);
 
@@ -17,29 +47,19 @@ const User = () => {
 
     const getUser = async () => {
       await fetch('http://api.github.com/users/' + user).then(async (res) => {
-        if (res.ok) {
-
-          const result = await res.json();
-          console.log(result)
-
-          setUserProfile(result);
-
-        }
-        else alert('Not Found user');
+        if (res.ok)
+          setUserProfile(await res.json());
+        else
+          alert('Not Found user');
       });
     }
 
     const getRepos = async () => {
       await fetch(userProfile.repos_url).then(async (res) => {
-        if (res.ok) {
-
-          const result = await res.json();
-          console.log(result);
-
-          setUserRepos(result);
-
-        }
-        else alert('No Repo Url Provided');
+        if (res.ok)
+          setUserRepos(await res.json());
+        else
+          alert('No Repo Url Provided');
       });
     }
 
@@ -48,45 +68,105 @@ const User = () => {
         await getUser();
         await getRepos();
       }
-      else alert('cade o usuario');
+      else
+        alert('cade o usuario');
     }
 
     getDataFromGitHub();
 
   }, [user, userProfile.repos_url]);
 
+  const handleClickBlog = () => window.open(userProfile.blog, '_blanc');
+
+  const handleClickGithubProfile = () => window.open(userProfile.html_url, '_blanc');
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'flex-start', height: '100%', width: '100%' }}>
-      <div style={{ position: 'relative', float: 'left', width: 240, backgroundColor: '#364960', height: '100%', padding: 20, boxShadow: 'rgba(0, 0, 0, 0.17) 2px 0px 20px 0px', zIndex: 1 }} >
-
-        <div style={{ marginBottom: 10 }}>
-          <img src={userProfile.avatar_url} style={{ maxWidth: 200, maxHeight: 200, borderRadius: '50%' }} alt='user_image' />
+    <div className="container-fluid h-100">
+      <div className="row h-100">
+        <div className="col-md-2 shadow px-4">
+          <div className="row justify-content-center d-none d-sm-none d-md-flex">
+            <img style={{ maxHeight: 150, maxWidth: 150 }} className='rounded-circle my-4' src={userProfile.avatar_url} alt='user_avatar' />
+          </div>
+          <div className="row">
+            <span style={{ fontSize: 29 }}>
+              {userProfile.name ? userProfile.name : userProfile.login}
+            </span>
+          </div>
+          <div className="row mb-2">
+            <span className="text-muted">
+              {userProfile.name && userProfile.login}
+            </span>
+          </div>
+          <div className="row mb-4">
+            {userProfile.company && (
+              <>
+                <span className="material-icons mr-1" style={{ fontSize: 22 }}>
+                  business
+                </span>
+                <span className="font-weight-light">
+                  {userProfile.company}
+                </span>
+              </>
+            )}
+          </div>
+          <div className="row mb-4">
+            <span>
+              {userProfile.bio}
+            </span>
+          </div>
+          <div className="row mb-1">
+            {userProfile.location && (
+              <div className="col">
+                <div className="row">
+                  <span className="material-icons mr-1" style={{ fontSize: 22 }}>
+                    location_on
+                  </span>
+                  <span >
+                    Location
+                  </span>
+                </div>
+                <div className="row">
+                  <span>
+                    {userProfile.location}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="row mb-1">
+            {userProfile.blog && (
+              <div className="col">
+                <div className="row">
+                  <span className="material-icons mr-1 text-primary" style={{ fontSize: 22 }}>
+                    language
+                  </span>
+                  <span className="text-primary">
+                    Blog
+                  </span>
+                </div>
+                <div className="row">
+                  <span className="text-primary pointer" style={{ fontSize: 16 }} onClick={() => handleClickBlog()}>
+                    {userProfile.blog}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="row py-1 fixed-bottom shadow bg-white">
+            <span className="text-purple pointer ml-4" onClick={() => handleClickGithubProfile()}>
+              Github Profile
+            </span>
+            <span className="material-icons text-purple pointer ml-2" onClick={() => handleClickGithubProfile()}>
+              send
+            </span>
+          </div>
         </div>
-
-        <div style={{ marginBottom: 5 }}>
-          <span style={{ fontFamily: 'Roboto', fontSize: 24 }}>
-            {userProfile.name ? userProfile.name : userProfile.login}
-          </span>
+        <div className="col-md-10">
+          <div className="row py-2 mx-md-1">
+            {userRepos.map((repo) => <Repo repo={repo} key={repo.id} />)}
+          </div>
         </div>
-
-        <div style={{ marginBottom: 20 }}>
-          <span style={{ fontFamily: 'Roboto' }}>
-            {userProfile.company}
-          </span>
-        </div>
-
-        <div>
-          <span style={{ fontFamily: 'Roboto' }}>
-            {userProfile.bio}
-          </span>
-        </div>
-
       </div>
-
-      <div style={{ padding: 20, height: '100%', width: '100%', backgroundColor: '#455468', overflow: 'scroll' }}>
-        {userRepos.map((repo) => <Repo key={repo.id} repo={repo} />)}
-      </div>
-
     </div>
   )
 
